@@ -1,3 +1,4 @@
 .vscode/
 /target
 
+*.json      # Don't include any json configuration files.
