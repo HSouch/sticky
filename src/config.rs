@@ -1,14 +1,15 @@
 
-use serde_json;
+use serde_json::{self, Map, Value};
 use std::fs;
 use std::io::Error;
 
 use crate::static_potential::{BurkertPotential, LoadablePotential, NFWPotential, Potential, PotentialType};
 
-
 pub struct SimSetup {
     pub verbose: bool,
     pub debug: bool, 
+
+    pub params: Map<String, Value>,
 
     pub potential: Box<dyn Potential>,
 }
@@ -39,7 +40,7 @@ pub fn load_params(filename: &String) -> Result<SimSetup, Error > {
     let simsetup = SimSetup {
         verbose: json_data["verbose"].as_bool().unwrap(),
         debug: json_data["debug"].as_bool().unwrap(),
-        
+        params: json_data.as_object().unwrap().clone(),
         potential: potential,
 
     };
