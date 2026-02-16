@@ -14,12 +14,7 @@ pub struct GeneratorConfig {
 }
 
 pub fn debug_generator(_params: &GeneratorConfig) -> Result<Body, Error> {
-    Ok(Body {
-        q: Vec3 {x: 0.0, y: 0.0, z: 0.0},
-        p: Vec3 { x: 0.0, y: 0.0, z: 0.0 },
-        mass: 1e6,
-        metallicity: 1e-2,
-    })
+    Ok(Body::default())
 }
 
 
@@ -27,8 +22,8 @@ pub fn exponential_disk_generator(params: &GeneratorConfig) -> Result<Body, Erro
 
     let seed_parameters = params.config_obj["seed_parameters"].as_object().unwrap();
 
-    let scale_radius = seed_parameters["scale_radius"].as_f64().unwrap();
-    let scale_height = seed_parameters["scale_height"].as_f64().unwrap();
+    let scale_radius = seed_parameters["scale_radius"].as_f64().expect("Bad parameter: Scale Radius");
+    let scale_height = seed_parameters["scale_height"].as_f64().expect("Bad parameter: Scale height");
 
     let max_tries = 2000;
 
