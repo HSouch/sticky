@@ -2,3 +2,6 @@
 /target
 
 *.json      # Don't include any json configuration files.
+testconfig.json
+
+*.csv
