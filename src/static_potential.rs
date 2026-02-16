@@ -64,7 +64,6 @@ pub enum PotentialType {
 
 pub struct NFWPotential {
     /// A (spherical) NFW profile
-    /// 
     pub rho_0: f64,
     pub r_s: f64,
 
