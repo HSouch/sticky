@@ -1,33 +1,53 @@
+//! This package uses a Body and BodyArray class for the majority of its data handling.
+//! Body is also designed to be compatible with barnes-hut
 
-use core::num;
-use std::fmt::Error;
+use std::{fmt::Error};
 
 use lin_alg::f64::Vec3;
 use barnes_hut::BodyModel;
 
-use crate::generators::GeneratorConfig;
+use crate::{generators::GeneratorConfig, snapshot::save_csv};
 use tqdm::tqdm;
 
 pub struct BodyArray {
-    bodies: Vec<Body>,
+    pub bodies: Vec<Body>,
 }
+
+
 
 impl BodyArray {
     
     /// Seed the body array using a generator function.
-    pub fn seed<F>(mut generator: F, generator_config: &GeneratorConfig) -> Result<Self, Error> 
+    pub fn seed<F>(generator: F, generator_config: &GeneratorConfig) -> Result<Self, Error> 
         where F: Fn(&GeneratorConfig) -> Result<Body, Error> 
     {
         
         let num_bodies = generator_config.config_obj["num_bodies"].as_f64().unwrap() as u32;
         
         let bodies: Vec<Body> 
-            = tqdm((0..num_bodies))
+            = tqdm(0..num_bodies)
             .filter_map(|_| generator(generator_config).ok())
             .collect();
         
         Ok(BodyArray{bodies: bodies})
     }
+
+
+    // pub fn collect_positions(&self) -> Result<Vec<Vec3>, Error> {
+    //     let qs: Vec<Vec3> = 
+    //     self.bodies.iter()
+    //     .map(|b| b.q.clone())
+    //     .collect();
+
+    //     Ok(qs)
+    // }
+
+
+    pub fn to_csv(&self, path: &str) -> Result<(), Box<dyn std::error::Error>> {
+        save_csv(&self, path)?;
+        Ok(())
+    }
+
 
     pub fn printout(&self) {
         println!("Collection of bodies with {} objects", self.bodies.len());
@@ -53,6 +73,18 @@ impl Body {
             metallicity: 0.0,
         }
     }
+
+    pub fn comma_separated_string(&self) -> String {
+        let mut row = String::new();
+        
+        row.push_str(format!("{},{},{},", self.q.x, self.q.y, self.q.z).as_str());
+        row.push_str(format!("{},{},{},", self.p.x, self.p.y, self.p.z).as_str());
+        row.push_str(format!("{},{}", self.mass, self.metallicity).as_str());
+        
+        row
+
+    }
+    
 }
 
 
@@ -66,3 +98,5 @@ impl BodyModel for Body {
         self.mass
     }
 }
+
+
