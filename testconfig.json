@@ -1,0 +1,34 @@
+{
+    "verbose": true,
+    "debug": false,
+
+    "snapshot": "example_arr.csv",
+    "outdir": "output/",
+
+    "dt_datadump": 10,
+
+    "potential": {
+        "name": "NFWPotential",
+        "parameters": {
+            "mass": 1e12,
+            "c" : 7
+        },
+        "units": {
+            "mass": "Msun"
+        }
+    },
+
+    "particles": {
+        "num_bodies": 5e3,
+        
+        "mass_range" : [1e6, 1e9],
+        "size_range" : [1e-2, 1e-1], 
+
+        "seed_fmt": "exponential",
+
+        "seed_parameters": {
+            "scale_radius": 10,
+            "scale_height": 1
+        }
+    }
+}

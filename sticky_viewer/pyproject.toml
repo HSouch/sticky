@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sticky_viewer"
+version = "2026.0.0"
+
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "astropy",
+]
+
+[project.scripts]
+sticky_ssv = "sticky_viewer.cli:main"
